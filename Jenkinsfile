@@ -35,5 +35,13 @@ pipeline {
                 sh 'curl -f http://host.docker.internal:5001'
             }
         }
+
+        stage('Use Secret') {
+            steps {
+                withCredentials([string(credentialsId: 'demo-secret', variable: 'DEMO_TOKEN')]) {
+                    sh 'echo "Jenkins received the secret safely"'
+                }
+            }
+        }
     }
 }
