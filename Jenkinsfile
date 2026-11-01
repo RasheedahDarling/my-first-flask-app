@@ -32,6 +32,7 @@ pipeline {
 
         stage('Test App') {
             steps {
+                sh 'sleep 3'
                 sh 'curl -f http://host.docker.internal:5001'
             }
         }
