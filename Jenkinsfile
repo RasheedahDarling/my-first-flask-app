@@ -45,4 +45,19 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            sh 'docker rm -f flask-test || true'
+            echo 'Temporary test container cleaned up.'
+        }
+
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check the console logs.'
+        }
+    }
 }
