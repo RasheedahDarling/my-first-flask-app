@@ -23,7 +23,7 @@ pipeline {
             }
         }
 
-        stage('Run Container') {
+        stage('Run Test Container') {
             steps {
                 sh 'docker rm -f flask-test || true'
                 sh 'docker run -d --name flask-test -p 5001:5000 my-first-flask-app'
@@ -42,6 +42,14 @@ pipeline {
                 withCredentials([string(credentialsId: 'demo-secret', variable: 'DEMO_TOKEN')]) {
                     sh 'echo "Jenkins received the secret safely"'
                 }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'docker rm -f flask-prod || true'
+                sh 'docker run -d --name flask-prod -p 5002:5000 my-first-flask-app'
+                echo 'Application deployed successfully.'
             }
         }
     }
