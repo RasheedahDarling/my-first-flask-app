@@ -67,8 +67,9 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 sh 'docker rm -f flask-prod || true'
-                sh 'docker run -d --name flask-prod -p 5002:5000 my-first-flask-app'
-                echo 'Application deployed successfully.'
+                sh 'docker pull rashline/my-first-flask-app:latest'
+                sh 'docker run -d --name flask-prod -p 5002:5000 rashline/my-first-flask-app:latest'
+                echo 'Application deployed successfully from Docker Hub.'
             }
         }
     }
