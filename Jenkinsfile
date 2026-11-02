@@ -45,7 +45,26 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Push Image to Docker Hub') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-login',
+                        usernameVariable: 'DOCKERHUB_USER',
+                        passwordVariable: 'DOCKERHUB_TOKEN'
+                    )
+                ]) {
+                    sh '''
+                        echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin
+                        docker tag my-first-flask-app rashline/my-first-flask-app:latest
+                        docker push rashline/my-first-flask-app:latest
+                        docker logout
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy Application') {
             steps {
                 sh 'docker rm -f flask-prod || true'
                 sh 'docker run -d --name flask-prod -p 5002:5000 my-first-flask-app'
